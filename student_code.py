@@ -1,6 +1,3 @@
-import math
-import random as rnd
-import numpy as np
 import requests
 from collections import Counter
 
@@ -27,12 +24,11 @@ def decrypt(C):
     sorted_bisymboles_freq = [item[0] for item in Counter(french_bisymboles_freq).most_common()]
 
     # Segmenter le texte chiffré
-    ciphertext_segments = split_ciphertext_into_segments(ciphertext)
+    ciphertext_segments = split_ciphertext_into_segments(C)
 
     # Déchiffrer en utilisant des mappages probables
     best_plaintext = ""
     best_ioc = 0
-    best_mapping = {}
 
     for _ in range(10):  # Nombre d'itérations pour améliorer les résultats
         single_mapping = {}
@@ -52,8 +48,11 @@ def decrypt(C):
         ioc = calculate_index_of_coincidence(decrypted_text)
 
         if abs(ioc - 0.077) < abs(best_ioc - 0.077):  # Comparer avec l'IoC attendu pour le français
+            best_ioc = ioc
             M = decrypted_text
+
     return M
+
 # Charger plusieurs textes français pour un corpus plus complet
 def load_text_from_web(urls):
     corpus = ""
